@@ -8,9 +8,9 @@ public class Main {
 //      Class.forName("com.mysql.cj.jdbc.Driver").getDeclaredConstructor().newInstance();
 //
 //      //creating connection with the database
-//      String password = "ReVeRs123";
-//      String username = "root";
-//      String url = "jdbc:mysql://localhost/test?serverTimezone=Europe/Moscow&useSSL=false";
+//      String password = "uNiFuN_123";
+//      String username = "vic1";
+//      String url = "jdbc:mysql://192.168.1.115/test?serverTimezone=Europe/Moscow&useSSL=false";
 //      Connection con = DriverManager.getConnection(url, username, password);
 //      System.out.println("Connection is successfull!");
 //      PreparedStatement ps = con.prepareStatement("SELECT * FROM `register` WHERE `email`=? and `pass`=?");

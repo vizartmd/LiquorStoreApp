@@ -1,19 +1,20 @@
 package com.sample;
 
+import java.lang.reflect.InvocationTargetException;
 import java.sql.*;
 
 public class Validate {
     static Connection con;
 
-    public static User checkUser(String email, String pass) {
+    public static User checkUser(String username, String pass) {
         User user = new User();
 
 
         try {
             con = DataDB.getConnection();
             System.out.println("Connection is successfull!");
-            PreparedStatement ps = con.prepareStatement("SELECT * FROM `register` WHERE `email`=? and `pass`=?");
-            ps.setString(1, email);
+            PreparedStatement ps = con.prepareStatement("SELECT * FROM `register` WHERE `username`=? and `pass`=?");
+            ps.setString(1, username);
             ps.setString(2, pass);
             ResultSet rs=ps.executeQuery();
 
@@ -29,27 +30,17 @@ public class Validate {
         return  user;
     }
 
-    public static boolean addUser(String email, String pass) {
-        final String SQL_INSERT = "INSERT INTO `register` VALUES (?,?)";
+    public static void addUser(String username, String pass) throws SQLException, ClassNotFoundException, NoSuchMethodException, InvocationTargetException, InstantiationException, IllegalAccessException {
+        con = DataDB.getConnection();
+        String sql = "INSERT INTO register VALUES (?,?)";
 
-        try {
-            con = DataDB.getConnection();
+        PreparedStatement statement = con.prepareStatement(sql);
+        statement.setString(1, username);
+        statement.setString(2, pass);
 
-            PreparedStatement ps = con.prepareStatement(SQL_INSERT);
-
-            ps.setString(1, email);
-            ps.setString(2, pass);
-            ResultSet rs = ps.executeQuery();
-
-            if(checkUser(email,pass) != null) {
-                return  true;
-            } else  {
-                return false;
-            }
+        int rowsInserted = statement.executeUpdate();
+        if (rowsInserted > 0) {
+            System.out.println("A new user was inserted successfully!");
         }
-        catch(Exception e) {
-            e.printStackTrace();
-        }
-        return  false;
     }
 }

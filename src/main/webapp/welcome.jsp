@@ -4,7 +4,7 @@
 <body>
 <center>
 <h1>
-    Welcome page!
+    Welcome <%= session.getAttribute("user").getUsername() %>!
 </h1>
 </body>
 </html>
