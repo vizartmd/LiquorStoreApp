@@ -9,11 +9,11 @@ import javax.servlet.http.HttpServletResponse;
 import java.io.IOException;
 import java.io.PrintWriter;
 
-@WebServlet("/login")
-public class LoginServlet extends HttpServlet {
+@WebServlet("/register")
+public class RegisterServlet extends HttpServlet {
 
     protected void doPost(HttpServletRequest request, HttpServletResponse response)
-        throws ServletException, IOException {
+            throws ServletException, IOException {
         response.setContentType("text/html;charset=UTF-8");
         PrintWriter out = response.getWriter();
 
@@ -23,15 +23,20 @@ public class LoginServlet extends HttpServlet {
 
         if(user.getUsername() != null && user.getPassword() != null)
         {
-            request.setAttribute("user", user);
-            RequestDispatcher rs = request.getRequestDispatcher("/welcome");
-            rs.forward(request, response);
+            out.println("Invalid email or password");
+            RequestDispatcher rs = request.getRequestDispatcher("/register.html");
+            rs.include(request, response);
         }
         else
         {
-            out.println("Username or Password incorrect");
-            RequestDispatcher rs = request.getRequestDispatcher("index.html");
-            rs.include(request, response);
+            if (Validate.addUser(email, pass)) {
+                Validate.addUser(email, pass);
+                RequestDispatcher rs = request.getRequestDispatcher("/index.html");
+                rs.forward(request, response);
+            } else {
+                RequestDispatcher rs = request.getRequestDispatcher("/error.html");
+                rs.forward(request, response);
+            }
         }
     }
 }

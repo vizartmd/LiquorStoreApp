@@ -16,7 +16,7 @@ public class WelcomeServlet extends HttpServlet {
         throws ServletException, IOException {
         response.setContentType("text/html;charset=UTF-8");
         PrintWriter out = response.getWriter();
-        out.println("Welcome user");
+        out.println("Welcome " + request.getAttribute("user").toString());
         RequestDispatcher rs = request.getRequestDispatcher("welcome.jsp");
     }
 }

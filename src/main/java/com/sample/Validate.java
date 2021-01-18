@@ -1,38 +1,55 @@
 package com.sample;
 
-import java.sql.Connection;
-import java.sql.DriverManager;
-import java.sql.PreparedStatement;
-import java.sql.ResultSet;
+import java.sql.*;
 
 public class Validate {
+    static Connection con;
 
-    public static boolean checkUser(String email, String pass)
-    {
-        boolean st = false;
+    public static User checkUser(String email, String pass) {
+        User user = new User();
+
 
         try {
-            //loading drivers for mysql
-            Class.forName("com.mysql.cj.jdbc.Driver");
-
-            //creating connection with the database
-            String password = "uNiFuN_123";
-            String username = "vic1";
-            String url = "jdbc:mysql://192.168.1.115/test?serverTimezone=Europe/Moscow&useSSL=false";
-            Connection con = DriverManager.getConnection(url, username, password);
+            con = DataDB.getConnection();
+            System.out.println("Connection is successfull!");
             PreparedStatement ps = con.prepareStatement("SELECT * FROM `register` WHERE `email`=? and `pass`=?");
-            ps.setString(1, "vic@gmail.com");
-            ps.setString(2, "free");
-            ResultSet rs = ps.executeQuery();
+            ps.setString(1, email);
+            ps.setString(2, pass);
+            ResultSet rs=ps.executeQuery();
 
-            if (rs != null) {
-                st = true;
+            while(rs.next()){
+                user.setUsername(rs.getString(1));
+                user.setPassword(rs.getString(2));
             }
-//            st = rs.next();
+            return user;
         }
         catch(Exception e) {
             e.printStackTrace();
         }
-        return st;
+        return  user;
+    }
+
+    public static boolean addUser(String email, String pass) {
+        final String SQL_INSERT = "INSERT INTO `register` VALUES (?,?)";
+
+        try {
+            con = DataDB.getConnection();
+
+            PreparedStatement ps = con.prepareStatement(SQL_INSERT);
+
+            ps.setString(1, email);
+            ps.setString(2, pass);
+            ResultSet rs = ps.executeQuery();
+
+            if(checkUser(email,pass) != null) {
+                return  true;
+            } else  {
+                return false;
+            }
+        }
+        catch(Exception e) {
+            e.printStackTrace();
+        }
+        return  false;
     }
 }
